@@ -12,6 +12,8 @@ import os.path
 from os import path
 import time
 import base64
+import os
+
 
 # pd.show_versions()
 # inputPath = st.text_input(label='Enter the input excel file path')
@@ -77,16 +79,22 @@ if File is not None:
     mySheet["A1"] = "name"
     mySheet["B1"] = "content"
 
+    base_path = os.path.dirname(os.getcwd())
+    outputPath = base_path+'/SER'
+    
     try:
 #         directory = "SER"
 #         parent_dir = "D:\\"
 #         path = os.path.join(parent_dir, directory)
 #         print(os.path.exists(path))
-        if os.path.exists(r"D:\SER"):
-            outputPath = 'D:\\SER'
-        else:
-            os.mkdir(r"D:\SER")
-            outputPath = 'D:\\SER'
+        # if os.path.exists(r"D:\SER"):
+        #     outputPath = 'D:\\SER'
+        # else:
+        #     os.mkdir(r"D:\SER")
+        #     outputPath = 'D:\\SER'
+        does_path_exist = os.path.exists(outputPath)
+        if not does_path_exist:
+            os.mkdir(outputPath)
 
         #outputPath = 'C:'
 
@@ -99,7 +107,7 @@ if File is not None:
             outputCSV = 'Processed takeaways' + '.csv'
 
             myWorkbook.save(outputPath + outputExcel)
-
+        
             # spell check with autocorrect
             check = Speller(lang='en')
             cList = []
@@ -125,8 +133,9 @@ if File is not None:
                 cellref.value = "A" + str(k)
 
             myWorkbook.save(outputPath + outputExcel)
-
+        
             read_file = pd.read_excel(outCSVPath + outputExcel, sheet_name='Sheet')
+        
             read_file.to_csv(outCSVPath + outputCSV, encoding='utf-8', index=None, header=True)
             # st.download_button(label="Download data as CSV", data=read_file, file_name='Processed takeaways.csv',mime='text/csv')
 
